@@ -14,6 +14,18 @@ public class Product {
         this.name = name;
     }
 
+    public Product(Long id, String name, String category, String description, double price, String condition, String status, int unitStock, String manufacturer) {
+        this.id = id;
+        this.name = name;
+        this.category = category;
+        this.description = description;
+        this.price = price;
+        this.condition = condition;
+        this.status = status;
+        this.unitStock = unitStock;
+        this.manufacturer = manufacturer;
+    }
+
     @Id
     @GeneratedValue
     private Long id;
