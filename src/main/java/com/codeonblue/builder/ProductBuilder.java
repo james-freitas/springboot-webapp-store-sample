@@ -65,4 +65,7 @@ public class ProductBuilder {
         return new Product(id, name, category, description, price, condition, status, unitStock, manufacturer );
     }
 
+    public Product createProductWithoutId() {
+        return new Product(name, category, description, price, condition, status, unitStock, manufacturer);
+    }
 }

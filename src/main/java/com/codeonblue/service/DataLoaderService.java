@@ -1,5 +1,6 @@
 package com.codeonblue.service;
 
+import com.codeonblue.builder.ProductBuilder;
 import com.codeonblue.model.Product;
 import com.codeonblue.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,25 +20,43 @@ public class DataLoaderService {
 
     @PostConstruct
     private void loadData() {
-        Product p1 = new Product("Canon Ball");
-        p1.setCategory("Category 1");
-        p1.setCondition("Sold");
-        p1.setDescription("Description of the Canon Ball");
-        p1.setManufacturer("Unknown");
-        p1.setPrice(10.0);
-        p1.setStatus("Unavailable");
-        p1.setUnitStock(30);
-        productRepository.save(p1);
 
-        Product p2 = new Product("Wrecking Ball");
-        p2.setCategory("Category 1");
-        p2.setCondition("Sold");
-        p2.setDescription("Description of the Wrecking Ball");
-        p2.setManufacturer("Unknown");
-        p2.setPrice(102.0);
-        p2.setStatus("Available");
-        p2.setUnitStock(30);
-        productRepository.save(p2);
+        Product product1 = new ProductBuilder()
+                .name("Guitar1")
+                .category("Instrument")
+                .description("This is a fender strat guitar")
+                .price(1200)
+                .condition("new")
+                .status("Active")
+                .unitStock(11)
+                .manufacturer("Fender")
+                .createProductWithoutId();
+        productRepository.save(product1);
+
+        Product product2 = new ProductBuilder()
+                .name("Record1")
+                .category("Record")
+                .description("This is an awesome mix of 20th century")
+                .price(25)
+                .condition("new")
+                .status("Active")
+                .unitStock(51)
+                .manufacturer("EMI")
+                .createProductWithoutId();
+        productRepository.save(product2);
+
+        Product product3 = new ProductBuilder()
+                .name("Speaker1")
+                .category("Accessory")
+                .description("This is Polk Shelf Speaker!")
+                .price(355)
+                .condition("new")
+                .status("Active")
+                .unitStock(9)
+                .manufacturer("Polk")
+                .createProductWithoutId();
+        productRepository.save(product3);
+
 
     }
 
