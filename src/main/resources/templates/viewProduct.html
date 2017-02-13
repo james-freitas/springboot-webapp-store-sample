@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:replace="fragments/allproducts-css :: head"/>
+<!-- NAVBAR
+================================================== -->
+<body>
+<div th:replace="fragments/menu :: menu" />
+
+<div class="container-wrapper">
+    <div class="container">
+
+        <div class="page-header">
+            <h1>Product Detail</h1>
+
+            <p class="lead">Here is the detail information of the product</p>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-md-5">
+                    <img src="#" alt="image" style="width: 100%; height: 300px" />
+                </div>
+                <div class="col-md-5">
+                    <h3 th:text="${productInstance.name}">Product Name</h3>
+                    <p th:text="${productInstance.description}">Product Description</p>
+                    <p>
+                        <strong>Manufacturer</strong><span th:text="': ' + ${productInstance.manufacturer}" ></span>
+                    </p>
+                    <p>
+                        <strong>Category</strong><span th:text="': ' + ${productInstance.category}" ></span>
+                    </p>
+                    <p>
+                        <strong>Condition</strong><span th:text="': ' + ${productInstance.condition}" ></span>
+                    </p>
+                    <p th:text="${productInstance.price} + ' ' + USD">Price</p>
+                </div>
+            </div>
+        </div>
+
+        <footer th:replace="fragments/footer :: footer" />
+    </div>
+
+</div><!-- /.container -->
+
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+
+<script th:src="@{/webjars/jquery/3.1.1/jquery.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
+
+</body>
+</html>

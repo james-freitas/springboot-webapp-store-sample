@@ -61,7 +61,7 @@ public class ProductBuilder {
         return this;
     }
 
-    public Product createProduct() {
+    public Product createProductWithId() {
         return new Product(id, name, category, description, price, condition, status, unitStock, manufacturer );
     }
 

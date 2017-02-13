@@ -8,6 +8,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.Arrays;
+import java.util.List;
 
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.*;
@@ -29,29 +30,8 @@ public class HomeControllerTest extends AbstractControllerTest{
 
     @Test
     public void testShouldForwardToProductListPageWithProductListAttached() throws Exception {
-        Product product1 = new ProductBuilder()
-                        .id(1L)
-                        .category("Sport")
-                        .description("Soccer ball")
-                        .price(50.0)
-                        .condition("condition1")
-                        .status("Available")
-                        .unitStock(50)
-                        .manufacturer("Jackson Sports")
-                        .createProduct();
 
-        Product product2 = new ProductBuilder()
-                        .id(2L)
-                        .category("Sport")
-                        .description("Soccer Socks")
-                        .price(5.0)
-                        .condition("condition2")
-                        .status("Available")
-                        .unitStock(100)
-                        .manufacturer("Jason Sports")
-                        .createProduct();
-
-        when(productServiceMock.findAll()).thenReturn(Arrays.asList(product1, product2));
+        when(productServiceMock.findAll()).thenReturn(createListWithTwoProducts());
 
         mockMvc.perform(get("/productList"))
                 .andExpect(status().isOk())
@@ -74,6 +54,65 @@ public class HomeControllerTest extends AbstractControllerTest{
 
         verify(productServiceMock, times(1)).findAll();
         verifyNoMoreInteractions(productServiceMock);
+    }
+
+    private List<Product> createListWithTwoProducts() {
+        Product product1 = new ProductBuilder()
+                .id(1L)
+                .category("Sport")
+                .description("Soccer ball")
+                .price(50.0)
+                .condition("condition1")
+                .status("Available")
+                .unitStock(50)
+                .manufacturer("Jackson Sports")
+                .createProductWithId();
+
+        Product product2 = new ProductBuilder()
+                        .id(2L)
+                        .category("Sport")
+                        .description("Soccer Socks")
+                        .price(5.0)
+                        .condition("condition2")
+                        .status("Available")
+                        .unitStock(100)
+                        .manufacturer("Jason Sports")
+                        .createProductWithId();
+        return Arrays.asList(product1, product2);
+    }
+
+    @Test
+    public void testShouldForwardToProductDetailPageWithProductAttached() throws Exception {
+        when(productServiceMock.find(1L)).thenReturn(createProduct());
+
+        mockMvc.perform(get("/productList/viewProduct"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("viewProduct"))
+                .andExpect(model().attribute("productInstance", hasProperty("id", is(1L))))
+                .andExpect(model().attribute("productInstance", hasProperty("category", is("Sport"))))
+                .andExpect(model().attribute("productInstance", hasProperty("description", is("Soccer ball"))))
+                .andExpect(model().attribute("productInstance", hasProperty("price", is(50.0))))
+                .andExpect(model().attribute("productInstance", hasProperty("condition", is("condition1"))))
+                .andExpect(model().attribute("productInstance", hasProperty("status", is("Available"))))
+                .andExpect(model().attribute("productInstance", hasProperty("unitStock", is(50))))
+                .andExpect(model().attribute("productInstance", hasProperty("manufacturer", is("Jackson Sports"))));
+
+        verify(productServiceMock, times(1)).find(1L);
+        verifyNoMoreInteractions(productServiceMock);
+
+    }
+
+    private Product createProduct() {
+        return new ProductBuilder()
+                .id(1L)
+                .category("Sport")
+                .description("Soccer ball")
+                .price(50.0)
+                .condition("condition1")
+                .status("Available")
+                .unitStock(50)
+                .manufacturer("Jackson Sports")
+                .createProductWithId();
     }
 
 }

@@ -23,6 +23,7 @@
                     <th>Category</th>
                     <th>Condition</th>
                     <th>Price</th>
+                    <th></th>
                 </tr>
             </thead>
             <tr th:each="product: ${productList}">
@@ -31,6 +32,11 @@
                 <td th:text="${product.category}">Category</td>
                 <td th:text="${product.condition}">Condition</td>
                 <td th:text="${product.price} + ' ' + USD">Price</td>
+                <td>
+                    <a th:href="@{'/productList/viewProduct/' + ${product.id}}">
+                        <span class="glyphicon glyphicon-info-sign" />
+                    </a>
+                </td>
             </tr>
         </table>
 
@@ -44,8 +50,8 @@
 <!-- Bootstrap core JavaScript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
-<script th:src="@{webjars/jquery/3.1.1/jquery.min.js}"></script>
-<script th:src="@{webjars/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
+<script th:src="@{/webjars/jquery/3.1.1/jquery.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
 
 </body>
 </html>
