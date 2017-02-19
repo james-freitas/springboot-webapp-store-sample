@@ -8,7 +8,7 @@ import javax.persistence.Id;
 @Entity
 public class Product {
 
-    private Product() {}
+    public Product() {}
 
     public Product(String name) {
         this.name = name;

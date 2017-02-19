@@ -34,4 +34,9 @@ public class ProductServiceBean implements ProductService {
     public Product find(Long id) {
         return productRepository.findOne(id);
     }
+
+    @Override
+    public Product add(Product product) {
+        return productRepository.save(product);
+    }
 }

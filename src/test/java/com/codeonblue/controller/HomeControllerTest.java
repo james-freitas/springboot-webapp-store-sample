@@ -4,15 +4,27 @@ import com.codeonblue.builder.ProductBuilder;
 import com.codeonblue.model.Product;
 import com.codeonblue.service.ProductService;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
+
+import static org.hamcrest.Matchers.hasProperty;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.hasItem;
+
+import static org.hamcrest.Matchers.is;
+import static org.mockito.Matchers.isA;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(HomeController.class)
@@ -113,6 +125,80 @@ public class HomeControllerTest extends AbstractControllerTest{
                 .unitStock(50)
                 .manufacturer("Jackson Sports")
                 .createProductWithId();
+    }
+
+    @Test
+    public void testShouldForwardToAdminPageWhenAccessingItsMapping() throws Exception {
+        mockMvc.perform(get("/admin"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("admin"));
+    }
+
+    @Test
+    public void testShouldForwardToProductInventoryPageWithProductListAttached() throws Exception {
+        when(productServiceMock.findAll()).thenReturn(createListWithTwoProducts());
+
+        mockMvc.perform(get("/admin/productInventory"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("productInventory"))
+                .andExpect(model().attribute("productList", hasSize(2)))
+                .andExpect(model().attribute("productList", hasItem(
+                        allOf(
+                                hasProperty("id", is(1L)),
+                                hasProperty("category", is("Sport")),
+                                hasProperty("description", is("Soccer ball"))
+                        )
+
+                )))
+                .andExpect(model().attribute("productList", hasItem(
+                        allOf(
+                                hasProperty("id", is(2L)),
+                                hasProperty("category", is("Sport")),
+                                hasProperty("description", is("Soccer Socks"))
+                        )
+                )));
+        verify(productServiceMock, times(1)).findAll();
+        verifyNoMoreInteractions(productServiceMock);
+    }
+
+    @Test
+    public void testShouldForwardToAddProductPageWhenAccessingItsMapping() throws Exception {
+        mockMvc.perform(get("/admin/productInventory/addProduct"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("addProduct"))
+                .andExpect(model().attribute("productInstance", hasProperty("category", is("instrument"))))
+                .andExpect(model().attribute("productInstance", hasProperty("condition", is("new"))))
+                .andExpect(model().attribute("productInstance", hasProperty("status", is("active"))));
+    }
+
+    @Test
+    public void testShouldRedirectToProductsInventoryPageAfterAddingAProduct() throws Exception {
+        Product productAdded = createProduct();
+
+        when(productServiceMock.add(isA(Product.class))).thenReturn(productAdded);
+
+        mockMvc.perform(post("/admin/productInventory/addProduct")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .param("category", "Sport")
+                .param("description", "Soccer ball")
+                .param("price", "50")
+                .param("condition", "condition1")
+                .param("status", "Available")
+                .param("unitStock", "50")
+                .param("manufacturer", "Jackson Sports"))
+                .andExpect(view().name("redirect:/admin/productInventory"))
+                .andExpect(redirectedUrl("/admin/productInventory"));
+
+        ArgumentCaptor<Product> formObjectArgument = ArgumentCaptor.forClass(Product.class);
+        verify(productServiceMock, times(1)).add(formObjectArgument.capture());
+        verifyNoMoreInteractions(productServiceMock);
+
+        Product productObject = formObjectArgument.getValue();
+
+        assertThat(productObject.getDescription(), is("Soccer ball"));
+        assertNull(productObject.getId());
+        assertThat(productObject.getCondition(), is("condition1"));
+
     }
 
 }

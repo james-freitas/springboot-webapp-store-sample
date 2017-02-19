@@ -9,4 +9,6 @@ public interface ProductService {
     Collection<Product> findAll();
 
     Product find(Long id);
+
+    Product add(Product product);
 }
