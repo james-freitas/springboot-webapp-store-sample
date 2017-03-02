@@ -64,6 +64,10 @@ public class HomeController {
         return "redirect:/admin/productInventory";
     }
 
-
+    @RequestMapping(value = "/admin/productInventory/deleteProduct/{id}", method = RequestMethod.GET)
+    public String deleteProduct(@PathVariable Long id) {
+        productService.remove(id);
+        return "redirect:/admin/productInventory";
+    }
 
 }

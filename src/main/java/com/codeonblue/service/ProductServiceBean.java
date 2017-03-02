@@ -39,4 +39,9 @@ public class ProductServiceBean implements ProductService {
     public Product add(Product product) {
         return productRepository.save(product);
     }
+
+    @Override
+    public void remove(Long id) {
+        productRepository.delete(id);
+    }
 }

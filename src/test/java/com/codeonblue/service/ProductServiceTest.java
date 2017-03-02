@@ -34,7 +34,7 @@ public class ProductServiceTest extends AbstractTest{
     }
 
     @Test
-    public void testFindAllProducts() throws Exception {
+    public void testShouldFindAllProducts() throws Exception {
         Collection<Product> productList = productService.findAll();
 
         assertNotNull("failure - expected not null", productList);
@@ -84,7 +84,7 @@ public class ProductServiceTest extends AbstractTest{
     }
 
     @Test
-    public void testFindOneProduct() {
+    public void testShouldFindAProductByItsId() {
         Product product = productService.find(1L);
         assertNotNull("faiulre - expected not null", product);
         assertThat(product.getId(), is(1L));
@@ -99,7 +99,7 @@ public class ProductServiceTest extends AbstractTest{
     }
 
     @Test
-    public void testCreateProduct() {
+    public void testShouldCreateAProduct() {
         Product productToBeCreated = new ProductBuilder()
                 .name("Product Test 01")
                 .description("Product description 01")
@@ -123,4 +123,17 @@ public class ProductServiceTest extends AbstractTest{
         assertThat(productCreated.getUnitStock(), is(100));
         assertThat(productCreated.getManufacturer(), is("Jackson Sports"));
     }
+
+    @Test
+    public void testShouldDeleteProductById(){
+        Collection<Product> productListBeforeDelete = productService.findAll();
+        assertNotNull("failure - expected not null", productListBeforeDelete);
+        assertThat(productListBeforeDelete.size(), is(3));
+
+        productService.remove(3L);
+        Collection<Product> productListAfterDelete = productService.findAll();
+        assertNotNull("failure - expected not null", productListAfterDelete);
+        assertThat(productListAfterDelete.size(), is(2));
+    }
+
 }

@@ -36,6 +36,9 @@
                     <a th:href="@{'/productList/viewProduct/' + ${product.id}}">
                         <span class="glyphicon glyphicon-info-sign" />
                     </a>
+                    <a th:href="@{'/admin/productInventory/deleteProduct/' + ${product.id}}">
+                        <span class="glyphicon glyphicon-remove" />
+                    </a>
                 </td>
             </tr>
         </table>
@@ -43,6 +46,7 @@
         <a th:href="@{'/admin/productInventory/addProduct'}" class="btn btn-primary">Add Product</a>
 
         <footer th:replace="fragments/footer :: footer" />
+
     </div>
 
 </div><!-- /.container -->

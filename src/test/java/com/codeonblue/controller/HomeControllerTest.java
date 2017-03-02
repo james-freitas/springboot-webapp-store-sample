@@ -198,6 +198,24 @@ public class HomeControllerTest extends AbstractControllerTest{
         assertThat(productObject.getDescription(), is("Soccer ball"));
         assertNull(productObject.getId());
         assertThat(productObject.getCondition(), is("condition1"));
+    }
+
+    @Test
+    public void testShouldRedirectToProductsInventoryPageAfterDeletingAProduct() throws Exception {
+        Product newProduct = createProduct();
+        when(productServiceMock.find(1L)).thenReturn(newProduct);
+
+        productServiceMock.remove(1L);
+
+        when(productServiceMock.find(1L)).thenReturn(null);
+
+        mockMvc.perform(get("/admin/productInventory/deleteProduct/1")
+                .param("id","1"))
+                .andExpect(status().is(302))
+                .andExpect(view().name("redirect:/admin/productInventory"))
+                .andExpect(redirectedUrl("/admin/productInventory"));
+
+        verify(productServiceMock, times(2)).remove(1L);
 
     }
 
