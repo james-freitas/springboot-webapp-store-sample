@@ -97,7 +97,7 @@ public class HomeControllerTest extends AbstractControllerTest{
     public void testShouldForwardToProductDetailPageWithProductAttached() throws Exception {
         when(productServiceMock.find(1L)).thenReturn(createProduct());
 
-        mockMvc.perform(get("/productList/viewProduct"))
+        mockMvc.perform(get("/productList/viewProduct/1"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("viewProduct"))
                 .andExpect(model().attribute("productInstance", hasProperty("id", is(1L))))

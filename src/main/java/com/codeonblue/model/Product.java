@@ -1,9 +1,8 @@
 package com.codeonblue.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.persistence.*;
 
 @Entity
 public class Product {
@@ -49,6 +48,9 @@ public class Product {
     private String status;
     private int unitStock;
     private String manufacturer;
+
+    @Transient
+    private MultipartFile image;
 
     public Product(String name,
                    String category,
@@ -138,6 +140,14 @@ public class Product {
 
     public void setManufacturer(String manufacturer) {
         this.manufacturer = manufacturer;
+    }
+
+    public MultipartFile getImage() {
+        return image;
+    }
+
+    public void setImage(MultipartFile image) {
+        this.image = image;
     }
 
     @Override

@@ -2,51 +2,61 @@ package com.codeonblue.controller;
 
 import com.codeonblue.model.Product;
 import com.codeonblue.service.ProductService;
+import com.codeonblue.service.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 @Controller
 public class HomeController {
 
-    @Autowired
     private ProductService productService;
 
-    @RequestMapping("/")
+    private final StorageService storageService;
+
+    @Autowired
+    public HomeController(ProductService productService, StorageService storageService) {
+        this.productService = productService;
+        this.storageService = storageService;
+    }
+
+    @GetMapping("/")
     public String home(){
         return "home";
     }
 
-    @RequestMapping("/productList")
+    @GetMapping("/productList")
     public String getProducts(Model model){
         model.addAttribute("productList", productService.findAll());
         return "productList";
     }
 
-    @RequestMapping("/productList/viewProduct/{id}")
+    @GetMapping("/productList/viewProduct/{id}")
     public String viewProduct(@PathVariable Long id, Model model){
         model.addAttribute("productInstance", productService.find(id));
         return "viewProduct";
     }
 
-    @RequestMapping("/admin")
+    @GetMapping("/admin")
     public String adminPage() {
         return "admin";
     }
 
-    @RequestMapping("/admin/productInventory")
+    @GetMapping("/admin/productInventory")
     public String productInventory(Model model){
         model.addAttribute("productList", productService.findAll());
         return "productInventory";
     }
 
-    @RequestMapping("/admin/productInventory/addProduct")
+    @GetMapping("/admin/productInventory/addProduct")
     public String addProduct(Model model){
         Product product = new Product();
         product.setCategory("instrument");
@@ -58,16 +68,27 @@ public class HomeController {
         return "addProduct";
     }
 
-    @RequestMapping(value = "/admin/productInventory/addProduct", method = RequestMethod.POST)
-    public String addProductPost(@ModelAttribute("productInstance") Product product) {
+    @PostMapping(value = "/admin/productInventory/addProduct")
+    public String addProductPost(@ModelAttribute("productInstance") Product product, MultipartFile file) {
+
         productService.add(product);
+        storageService.store(product.getImage());
+
         return "redirect:/admin/productInventory";
     }
 
-    @RequestMapping(value = "/admin/productInventory/deleteProduct/{id}", method = RequestMethod.GET)
+    @GetMapping("/admin/productInventory/deleteProduct/{id}")
     public String deleteProduct(@PathVariable Long id) {
         productService.remove(id);
         return "redirect:/admin/productInventory";
+    }
+
+    @GetMapping("/teste")
+    @ResponseBody
+    public String teste(HttpServletRequest request){
+        String rootDirectory = request.getSession().getServletContext().getRealPath("/");
+
+        return rootDirectory;
     }
 
 }
