@@ -1,6 +1,7 @@
 package com.codeonblue.controller;
 
 import com.codeonblue.model.Product;
+import com.codeonblue.model.ProductImage;
 import com.codeonblue.service.ProductService;
 import com.codeonblue.service.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,8 +72,10 @@ public class HomeController {
     @PostMapping(value = "/admin/productInventory/addProduct")
     public String addProductPost(@ModelAttribute("productInstance") Product product, MultipartFile file) {
 
+        ProductImage productImage = ProductImage.newInstance(product.getId(), file);
+
         productService.add(product);
-        storageService.store(product.getImage());
+        storageService.storeProductImage(productImage);
 
         return "redirect:/admin/productInventory";
     }

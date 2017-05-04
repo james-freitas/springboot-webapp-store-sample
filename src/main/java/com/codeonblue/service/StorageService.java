@@ -1,5 +1,6 @@
 package com.codeonblue.service;
 
+import com.codeonblue.model.ProductImage;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -10,7 +11,7 @@ public interface StorageService {
 
     void init();
 
-    void store(MultipartFile file);
+  /*  void store(MultipartFile file);
 
     void storePictureToFilename(MultipartFile file, String filename);
 
@@ -20,6 +21,8 @@ public interface StorageService {
 
     Resource loadAsResource(String filename);
 
-    void deleteAll();
+    void deleteAll(); */
+
+    void storeProductImage(ProductImage productImage);
 
 }

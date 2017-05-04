@@ -1,5 +1,6 @@
 package com.codeonblue.service;
 
+import com.codeonblue.model.ProductImage;
 import com.codeonblue.validator.PictureValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
@@ -41,6 +43,7 @@ public class FileSystemStorageService implements StorageService {
         }
     }
 
+    /*
     @Override
     public void store(MultipartFile file) {
         try {
@@ -51,8 +54,8 @@ public class FileSystemStorageService implements StorageService {
         } catch (IOException e) {
             throw new StorageException("Failed to store file " + file.getOriginalFilename(), e);
         }
-    }
-
+    }*/
+/*
     @Override
     public void storePictureToFilename(MultipartFile file, String filename) {
         if(file.isEmpty()) {
@@ -70,9 +73,9 @@ public class FileSystemStorageService implements StorageService {
 
     private String setPictureLocationAndName(MultipartFile file, String filename) {
         return this.rootLocation + "\\" + filename + this.pictureValidator.getFileExtension(file);
-    }
+    }*/
 
-
+/*
     @Override
     public Stream<Path> loadAll() {
         try {
@@ -82,15 +85,14 @@ public class FileSystemStorageService implements StorageService {
         } catch (IOException e) {
             throw new StorageException("Failed to read stored files", e);
         }
-    }
-
+    }*/
+/*
     @Override
     public Path load(String filename) {
         return rootLocation.resolve(filename);
     }
-
-
-
+*/
+/*
     @Override
     public Resource loadAsResource(String filename) {
         try {
@@ -109,5 +111,21 @@ public class FileSystemStorageService implements StorageService {
     @Override
     public void deleteAll() {
         FileSystemUtils.deleteRecursively(rootLocation.toFile());
+    }
+*/
+    @Override
+    public void storeProductImage(ProductImage productImage) {
+        MultipartFile imageFile = productImage.getImageFile();
+
+        Path targetFileLocation = Paths.get(rootLocation + "\\" + productImage.getProductImageId());
+
+        if(imageFile != null && !imageFile.isEmpty()){
+            try {
+                imageFile.transferTo(new File(targetFileLocation.toString()));
+            } catch (IOException e) {
+                e.printStackTrace();
+                throw new RuntimeException("Product image saving failed", e);
+            }
+        }
     }
 }
