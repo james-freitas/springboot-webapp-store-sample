@@ -72,9 +72,9 @@ public class HomeController {
     @PostMapping(value = "/admin/productInventory/addProduct")
     public String addProductPost(@ModelAttribute("productInstance") Product product, MultipartFile file) {
 
-        ProductImage productImage = ProductImage.newInstance(product.getId(), file);
-
         productService.add(product);
+
+        ProductImage productImage = ProductImage.newInstance(product.getId(), product.getImage());
         storageService.storeProductImage(productImage);
 
         return "redirect:/admin/productInventory";

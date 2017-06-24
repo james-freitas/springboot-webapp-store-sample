@@ -17,20 +17,17 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
 
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
+
 @Service
 public class FileSystemStorageService implements StorageService {
 
     private final Path rootLocation;
 
-    private final PictureValidator pictureValidator;
-
     @Autowired
-    public FileSystemStorageService(StorageProperties properties, PictureValidator pictureValidator) {
-
+    public FileSystemStorageService(StorageProperties properties) {
         this.rootLocation = Paths.get(properties.getLocation());
-        this.pictureValidator = pictureValidator;
     }
-
 
     @Override
     public void init() {
@@ -43,85 +40,16 @@ public class FileSystemStorageService implements StorageService {
         }
     }
 
-    /*
-    @Override
-    public void store(MultipartFile file) {
-        try {
-            if(file.isEmpty()) {
-                throw new StorageException("Failed to store empty file " + file.getOriginalFilename());
-            }
-            Files.copy(file.getInputStream(), this.rootLocation.resolve(file.getOriginalFilename()));
-        } catch (IOException e) {
-            throw new StorageException("Failed to store file " + file.getOriginalFilename(), e);
-        }
-    }*/
-/*
-    @Override
-    public void storePictureToFilename(MultipartFile file, String filename) {
-        if(file.isEmpty()) {
-            throw new StorageException("Failed to store empty file :" + file.getOriginalFilename());
-        }
-        if(!pictureValidator.isValidExtension(file)) {
-            throw new InvalidPictureException("Invalid picture file.");
-        }
-        try {
-            Files.copy(file.getInputStream(), this.rootLocation.resolve(setPictureLocationAndName(file, filename)));
-        } catch (IOException e) {
-            throw new StorageException("Failed to store file " + file.getOriginalFilename(), e);
-        }
-    }
-
-    private String setPictureLocationAndName(MultipartFile file, String filename) {
-        return this.rootLocation + "\\" + filename + this.pictureValidator.getFileExtension(file);
-    }*/
-
-/*
-    @Override
-    public Stream<Path> loadAll() {
-        try {
-            return Files.walk(this.rootLocation, 1)
-                    .filter(path -> !path.equals(this.rootLocation))
-                    .map(path -> this.rootLocation.relativize(path));
-        } catch (IOException e) {
-            throw new StorageException("Failed to read stored files", e);
-        }
-    }*/
-/*
-    @Override
-    public Path load(String filename) {
-        return rootLocation.resolve(filename);
-    }
-*/
-/*
-    @Override
-    public Resource loadAsResource(String filename) {
-        try {
-            Path file = load(filename);
-            Resource resource = new UrlResource(file.toUri());
-            if(resource.exists() || resource.isReadable()) {
-                return resource;
-            } else {
-                throw new StorageFileNotFoundException("Could not read file: " + filename);
-            }
-        } catch (MalformedURLException e) {
-            throw new StorageFileNotFoundException("Could not read file: " + filename, e);
-        }
-    }
-
-    @Override
-    public void deleteAll() {
-        FileSystemUtils.deleteRecursively(rootLocation.toFile());
-    }
-*/
     @Override
     public void storeProductImage(ProductImage productImage) {
         MultipartFile imageFile = productImage.getImageFile();
 
-        Path targetFileLocation = Paths.get(rootLocation + "\\" + productImage.getProductImageId());
+       String targetFileLocation = productImage.getProductImageId() + ".jpg";
 
         if(imageFile != null && !imageFile.isEmpty()){
             try {
-                imageFile.transferTo(new File(targetFileLocation.toString()));
+                Files.copy(imageFile.getInputStream(), this.rootLocation.resolve(targetFileLocation), REPLACE_EXISTING);
+
             } catch (IOException e) {
                 e.printStackTrace();
                 throw new RuntimeException("Product image saving failed", e);
