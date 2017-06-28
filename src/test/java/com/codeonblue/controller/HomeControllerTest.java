@@ -3,11 +3,13 @@ package com.codeonblue.controller;
 import com.codeonblue.builder.ProductBuilder;
 import com.codeonblue.model.Product;
 import com.codeonblue.service.ProductService;
+import com.codeonblue.service.StorageService;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 
 import java.util.Arrays;
 import java.util.List;
@@ -32,6 +34,9 @@ public class HomeControllerTest extends AbstractControllerTest{
 
     @MockBean
     ProductService productServiceMock;
+
+    @MockBean
+    StorageService storageServiceMock;
 
     @Test
     public void testShouldForwardToHomePageWhenAccessingRoot() throws Exception {
@@ -124,6 +129,7 @@ public class HomeControllerTest extends AbstractControllerTest{
                 .status("Available")
                 .unitStock(50)
                 .manufacturer("Jackson Sports")
+                .image(null)
                 .createProductWithId();
     }
 
@@ -217,6 +223,12 @@ public class HomeControllerTest extends AbstractControllerTest{
 
         verify(productServiceMock, times(2)).remove(1L);
 
+    }
+
+    public void testShouldSaveUploadedFile() throws Exception {
+        MockMultipartFile multipartFile =
+                new MockMultipartFile("file", "test.jpg", "text/plain", "Spring Framework".getBytes());
+        //this.mockMvc.perform()
     }
 
 }

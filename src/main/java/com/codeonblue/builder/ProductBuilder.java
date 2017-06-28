@@ -1,6 +1,7 @@
 package com.codeonblue.builder;
 
 import com.codeonblue.model.Product;
+import org.springframework.web.multipart.MultipartFile;
 
 public class ProductBuilder {
 
@@ -13,6 +14,7 @@ public class ProductBuilder {
     private String status;
     private int unitStock;
     private String manufacturer;
+    private MultipartFile image;
 
     public ProductBuilder(){ }
 
@@ -61,8 +63,13 @@ public class ProductBuilder {
         return this;
     }
 
+    public ProductBuilder image(MultipartFile image){
+        this.image = image;
+        return this;
+    }
+
     public Product createProductWithId() {
-        return new Product(id, name, category, description, price, condition, status, unitStock, manufacturer );
+        return new Product(id, name, category, description, price, condition, status, unitStock, manufacturer, image);
     }
 
     public Product createProductWithoutId() {

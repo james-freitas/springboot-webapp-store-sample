@@ -70,6 +70,28 @@ public class Product {
         this.manufacturer = manufacturer;
     }
 
+    public Product(Long id,
+                   String name,
+                   String category,
+                   String description,
+                   double price,
+                   String condition,
+                   String status,
+                   int unitStock,
+                   String manufacturer,
+                   MultipartFile image) {
+        this.id = id;
+        this.name = name;
+        this.category = category;
+        this.description = description;
+        this.price = price;
+        this.condition = condition;
+        this.status = status;
+        this.unitStock = unitStock;
+        this.manufacturer = manufacturer;
+        this.image = image;
+    }
+
     public Long getId() {
         return id;
     }
