@@ -43,17 +43,24 @@ public class FileSystemStorageService implements StorageService {
     @Override
     public void storeProductImage(ProductImage productImage) {
         MultipartFile imageFile = productImage.getImageFile();
+        isValidExtension(imageFile);
 
-       String targetFileLocation = productImage.getProductImageId() + ".jpg";
+
+        String targetFileLocation = productImage.getProductImageId() + ".jpg";
 
         if(imageFile != null && !imageFile.isEmpty()){
             try {
                 Files.copy(imageFile.getInputStream(), this.rootLocation.resolve(targetFileLocation), REPLACE_EXISTING);
-
             } catch (IOException e) {
                 e.printStackTrace();
                 throw new RuntimeException("Product image saving failed", e);
             }
         }
+    }
+
+    private boolean isValidExtension(MultipartFile imageFile) {
+        String originalFilename = imageFile.getOriginalFilename();
+        String[] filename = originalFilename.split(".");
+        return false;
     }
 }
