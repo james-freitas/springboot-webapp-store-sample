@@ -18,7 +18,8 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-5">
-                    <img src="#" alt="image" style="width: 100%; height: 300px" />
+                    <img src="#" alt="image" title="image"
+                         th:src="@{'/images/product-images/' + ${productInstance.id} + '.jpg'}"/>
                 </div>
                 <div class="col-md-5">
                     <h3 th:text="${productInstance.name}">Product Name</h3>

@@ -33,9 +33,7 @@ dependencies {
     compile('org.springframework.boot:spring-boot-starter-data-jpa')
     runtime('com.h2database:h2')
 
-    // Working wiht images
-	compile('commons-io:commons-io:2.4')
-    // provided('javax.servlet:servlet-api:2.5')
+	optional "org.springframework.boot:spring-boot-configuration-processor"
 
     runtime('org.springframework.boot:spring-boot-devtools')
 
@@ -45,3 +43,5 @@ dependencies {
 
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 }
+
+compileJava.dependsOn(processResources)
