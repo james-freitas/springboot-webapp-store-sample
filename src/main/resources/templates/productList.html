@@ -27,7 +27,12 @@
                 </tr>
             </thead>
             <tr th:each="product: ${productList}">
-                <td><img src="#" alt="image" /></td>
+                <td>
+                    <a th:href="@{'/productList/viewProduct/' + ${product.id}}">
+                        <img src="#" alt="image" title="image" style="width: 100%"
+                             th:src="@{'/images/product-images/' + ${product.id} + '.png'}"/>
+                    </a>
+                </td>
                 <td th:text="${product.name}">Product name</td>
                 <td th:text="${product.category}">Category</td>
                 <td th:text="${product.condition}">Condition</td>

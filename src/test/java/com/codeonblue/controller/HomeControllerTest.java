@@ -206,5 +206,19 @@ public class HomeControllerTest extends AbstractControllerTest{
         assertThat(productObject.getCondition(), is("condition1"));
     }
 
+    // TODO - Test delete product
+    @Test
+    public void testShouldForwardToProductListPageWhenProductisDeleted(){
+
+    }
+
+    // TODO - Test show edit page
+    @Test
+    public void testShouldForwardToProductEditPageWithOkStatus() throws Exception {
+        when(productServiceMock.find(1L)).thenReturn(createProduct());
+
+        mockMvc.perform(get("/admin/productInventory/editProduct/1"))
+                .andExpect(status().isOk());
+    }
 
 }

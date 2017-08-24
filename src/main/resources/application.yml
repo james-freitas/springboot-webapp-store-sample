@@ -14,5 +14,5 @@ spring:
       path: /console
   http:
     multipart:
-      max-file-size: 128KB
-      max-request-size: 128KB
+      max-file-size: 500KB
+      max-request-size: 500KB

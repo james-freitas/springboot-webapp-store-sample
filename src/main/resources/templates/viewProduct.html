@@ -18,10 +18,16 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-5">
-                    <img src="#" alt="image" title="image"
-                         th:src="@{'/images/product-images/' + ${productInstance.id} + '.jpg'}"/>
+
+
+                    <img src="#" th:src="@{'/images/product-images/' + ${productInstance.id} + '.png'}"
+                         alt="image" title="image" style="width: 100%" />
+
                 </div>
                 <div class="col-md-5">
+                    <h3 th:text="@{'/images/product-images/' + ${productInstance.id} + '.png'}">Id</h3>
+
+
                     <h3 th:text="${productInstance.name}">Product Name</h3>
                     <p th:text="${productInstance.description}">Product Description</p>
                     <p>
@@ -37,6 +43,7 @@
                 </div>
             </div>
         </div>
+        <br />
 
         <footer th:replace="fragments/footer :: footer" />
     </div>

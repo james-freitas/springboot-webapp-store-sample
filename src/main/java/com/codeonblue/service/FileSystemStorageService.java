@@ -15,12 +15,16 @@ import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 @Service
 public class FileSystemStorageService implements StorageService {
 
-    private final Path rootLocation;
+    // TODO - Implement delete the file
+
+    private Path rootLocation;
 
     @Autowired
     public FileSystemStorageService(StorageProperties properties) {
         this.rootLocation = Paths.get(properties.getLocation());
     }
+
+    public FileSystemStorageService(){}
 
     @Override
     public void init() {
@@ -36,8 +40,9 @@ public class FileSystemStorageService implements StorageService {
     @Override
     public void storeProductImage(ProductImage productImage) {
         MultipartFile imageFile = productImage.getImageFile();
-        //if(isValidExtension(imageFile)){
-            String targetFileLocation = productImage.getProductImageId() + ".jpg";
+
+        if(isValidExtension(imageFile)){
+            String targetFileLocation = productImage.getImageFileName();
 
             if(imageFile != null && !imageFile.isEmpty()){
                 try {
@@ -47,16 +52,33 @@ public class FileSystemStorageService implements StorageService {
                     throw new RuntimeException("Product image saving failed", e);
                 }
             }
-//        } else {
-  //          throw new RuntimeException("Invalid image extension.  Use png");
-    //    }
+        } else {
+            throw new RuntimeException("Invalid image extension.  Use png.");
+        }
 
 
     }
 
+    @Override
+    public void removeImageFile(Long id) {
+        String fileName = "/" + id + ".png";
+        Path filePath = Paths.get(rootLocation + fileName);
+
+        if(Files.exists(filePath)){
+            try {
+                Files.delete(filePath);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     private boolean isValidExtension(MultipartFile imageFile) {
         String originalFilename = imageFile.getOriginalFilename();
-        String[] filename = originalFilename.split(".");
-        return filename[1].equalsIgnoreCase("jpg");
+        String[] filename = originalFilename.split("\\.");
+        return filename[1].equalsIgnoreCase("png");
+                // || filename[1].equalsIgnoreCase("jpg");
+
+        // TODO - Implement option for png or jpg (Might change product and productImage modeling)
     }
 }

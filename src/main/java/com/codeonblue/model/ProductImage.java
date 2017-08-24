@@ -5,7 +5,6 @@ import org.springframework.web.multipart.MultipartFile;
 public class ProductImage {
 
     private Long productImageId;
-
     private MultipartFile imageFile;
 
     public ProductImage() {}
@@ -34,5 +33,9 @@ public class ProductImage {
 
     public void setImageFile(MultipartFile imageFile) {
         this.imageFile = imageFile;
+    }
+
+    public String getImageFileName(){
+        return this.productImageId + "." + this.imageFile.getOriginalFilename().split("\\.")[1];
     }
 }

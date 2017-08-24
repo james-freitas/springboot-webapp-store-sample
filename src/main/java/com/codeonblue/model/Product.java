@@ -52,6 +52,9 @@ public class Product {
     @Transient
     private MultipartFile image;
 
+    private String imageFileName;
+
+
     public Product(String name,
                    String category,
                    String description,
@@ -185,5 +188,13 @@ public class Product {
                 ", unitStock=" + unitStock +
                 ", manufacturer='" + manufacturer + '\'' +
                 '}';
+    }
+
+    public String getImageFileName() {
+        return imageFileName;
+    }
+
+    public void setImageFileName(String imageFileName) {
+        this.imageFileName = imageFileName;
     }
 }

@@ -29,20 +29,23 @@
             <tr th:each="product: ${productList}">
                 <td>
                     <a th:href="@{'/productList/viewProduct/' + ${product.id}}">
-                        <img src="#" alt="image" title="image"
-                             th:src="@{'/images/product-images/' + ${product.id} + '.jpg'}"/>
+                        <img src="#" alt="image" title="image" style="width: 100%"
+                             th:src="@{'/images/product-images/' + ${product.id} + '.png'}"/>
                     </a>
                 </td>
-                <td th:text="${product.name}" style="vertical-align: middle">Product name</td>
-                <td th:text="${product.category}" style="vertical-align: middle">Category</td>
-                <td th:text="${product.condition}" style="vertical-align: middle">Condition</td>
-                <td th:text="${product.price} + ' ' + USD" style="vertical-align: middle">Price</td>
+                <td th:text="${product.name}" >Product name</td>
+                <td th:text="${product.category}" >Category</td>
+                <td th:text="${product.condition}" >Condition</td>
+                <td th:text="${product.price} + ' ' + USD" >Price</td>
                 <td>
                     <a th:href="@{'/productList/viewProduct/' + ${product.id}}">
                         <span class="glyphicon glyphicon-info-sign" />
                     </a>
                     <a th:href="@{'/admin/productInventory/deleteProduct/' + ${product.id}}">
                         <span class="glyphicon glyphicon-remove" />
+                    </a>
+                    <a th:href="@{'/admin/productInventory/editProduct/' + ${product.id}}">
+                        <span class="glyphicon glyphicon-pencil" />
                     </a>
                 </td>
             </tr>

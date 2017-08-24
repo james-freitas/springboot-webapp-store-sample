@@ -82,15 +82,30 @@ public class HomeController {
 
     @GetMapping("/admin/productInventory/deleteProduct/{id}")
     public String deleteProduct(@PathVariable Long id) {
+        storageService.removeImageFile(id);
+
         productService.remove(id);
         return "redirect:/admin/productInventory";
     }
+
+    @GetMapping("/admin/productInventory/editProduct/{id}")
+    public String editProduct(@PathVariable("id") Long id, Model model){
+        Product product = productService.find(id);
+        model.addAttribute("productInstance", product);
+        return "editProduct";
+    }
+
+    @PostMapping("/admin/productInventory/editProduct")
+    public String editProduct(@ModelAttribute("product") Product product, Model model){
+        return null;
+    }
+
+
 
     @GetMapping("/teste")
     @ResponseBody
     public String teste(HttpServletRequest request){
         String rootDirectory = request.getSession().getServletContext().getRealPath("/");
-
         return rootDirectory;
     }
 
